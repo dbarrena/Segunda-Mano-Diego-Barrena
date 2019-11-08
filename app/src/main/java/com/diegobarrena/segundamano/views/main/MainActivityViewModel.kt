@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.diegobarrena.segundamano.api.ExchangeRatesApi
 import com.diegobarrena.segundamano.model.HistoricRates
+import com.diegobarrena.segundamano.views.base.BaseViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -13,13 +14,9 @@ import javax.inject.Inject
 class MainActivityViewModel @Inject
 constructor(
     private val exchangeRatesApi: ExchangeRatesApi
-) : ViewModel() {
+) : BaseViewModel() {
     val historicRates: MutableLiveData<HistoricRates> by lazy {
         MutableLiveData<HistoricRates>().apply { setValue(null) }
-    }
-
-    val messages: MutableLiveData<String> by lazy {
-        MutableLiveData<String>().apply { setValue(null) }
     }
 
     fun getHistoricRates(startDate: String, endDate: String) {
