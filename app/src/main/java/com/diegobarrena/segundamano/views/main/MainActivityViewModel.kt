@@ -29,17 +29,24 @@ constructor(
                     call: Call<HistoricRates>,
                     response: Response<HistoricRates>
                 ) {
-                    if (response.code() == 200) {
-                        response.body()?.let {
-                            historicRates.postValue(it)
-                        } ?: run {
-                            messages.postValue(
-                                "There are no records for this time frame."
-                            )
+                    if(response.isSuccessful) {
+                        if (response.code() == 200) {
+                            response.body()?.let {
+                                historicRates.postValue(it)
+                            } ?: run {
+                                messages.postValue(
+                                    "There are no records for this time frame."
+                                )
+                            }
+                        } else {
+                            Timber.e("Error code ${response.code()} at ${call.request().url()}")
+                            messages.postValue("There was an error processing your request.")
                         }
                     } else {
-                        Timber.e("Error code ${response.code()} at ${call.request().url()}")
-                        messages.postValue("There was an error processing your request.")
+                        Timber.e("Error: ${response.raw().message()}")
+                        messages.postValue(
+                            "There was an error processing your request"
+                        )
                     }
                 }
 
